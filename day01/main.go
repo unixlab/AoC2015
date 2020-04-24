@@ -22,14 +22,19 @@ func main() {
 	}
 
 	currentLevel := 0
+	firstBasementHit := 0
 
-	for _, moveChar := range strings.Split(line, "") {
+	for move, moveChar := range strings.Split(line, "") {
 		if moveChar == "(" {
 			currentLevel++
 		} else if moveChar == ")" {
 			currentLevel--
 		}
+		if currentLevel == -1 && firstBasementHit == 0 {
+			firstBasementHit = move + 1
+		}
 	}
 
 	fmt.Println(currentLevel)
+	fmt.Println(firstBasementHit)
 }
