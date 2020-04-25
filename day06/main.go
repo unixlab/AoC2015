@@ -38,7 +38,8 @@ func parseLine(line string) (int, int, int, int, int) {
 }
 
 func main() {
-	var grid [1000][1000]bool
+	var gridPart1 [1000][1000]bool
+	var gridPart2 [1000][1000]int
 
 	file, _ := os.Open("input.txt")
 	scanner := bufio.NewScanner(file)
@@ -49,24 +50,32 @@ func main() {
 			for y := yS; y <= yD; y++ {
 				switch action {
 				case 0:
-					grid[x][y] = false
+					gridPart1[x][y] = false
+					if gridPart2[x][y] > 0 {
+						gridPart2[x][y]--
+					}
 				case 1:
-					grid[x][y] = true
+					gridPart1[x][y] = true
+					gridPart2[x][y]++
 				case 2:
-					grid[x][y] = !grid[x][y]
+					gridPart1[x][y] = !gridPart1[x][y]
+					gridPart2[x][y] += 2
 				}
 			}
 		}
 	}
 
-	counter := 0
+	counterPart1 := 0
+	counterPart2 := 0
 	for x := 0; x < 1000; x++ {
 		for y := 0; y < 1000; y++ {
-			if grid[x][y] {
-				counter++
+			if gridPart1[x][y] {
+				counterPart1++
 			}
+			counterPart2 += gridPart2[x][y]
 		}
 	}
 
-	fmt.Println(counter)
+	fmt.Println(counterPart1)
+	fmt.Println(counterPart2)
 }
