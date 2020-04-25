@@ -41,8 +41,28 @@ func checkBlacklist(input string) bool {
 	return true
 }
 
+func checkRepeat(input string) bool {
+	for i := 0; i < len(input)-2; i++ {
+		if input[i:i+1] == input[i+2:i+3] {
+			return true
+		}
+	}
+	return false
+}
+
+func checkTwoTwice(input string) bool {
+	for i := 0; i < len(input)-1; i++ {
+		pair := input[i : i+2]
+		if strings.Count(input, pair) >= 2 {
+			return true
+		}
+	}
+	return false
+}
+
 func main() {
-	counter := 0
+	counterP1 := 0
+	counterP2 := 0
 
 	file, _ := os.Open("input.txt")
 	scanner := bufio.NewScanner(file)
@@ -50,9 +70,13 @@ func main() {
 	for scanner.Scan() {
 		in := scanner.Text()
 		if checkBlacklist(in) && checkRow(in) && checkVowels(in) {
-			counter++
+			counterP1++
+		}
+		if checkRepeat(in) && checkTwoTwice(in) {
+			counterP2++
 		}
 	}
 
-	fmt.Println(counter)
+	fmt.Println(counterP1)
+	fmt.Println(counterP2)
 }
