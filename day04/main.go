@@ -22,4 +22,17 @@ func main() {
 		}
 		counter++
 	}
+
+	counter = 0
+	for {
+		hasher := md5.New()
+		io.WriteString(hasher, fmt.Sprintf("%s%d", input, counter))
+		hash := fmt.Sprintf("%x", hasher.Sum(nil))
+		if strings.HasPrefix(hash, "000000") {
+			fmt.Println(counter)
+			fmt.Println(hash)
+			break
+		}
+		counter++
+	}
 }
