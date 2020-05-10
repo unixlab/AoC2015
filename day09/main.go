@@ -49,6 +49,7 @@ func main() {
 	}
 
 	minDistance := -1
+	maxDistance := -1
 
 	p := prmt.New(prmt.StringSlice(cityNames))
 	for p.Next() {
@@ -65,6 +66,10 @@ func main() {
 		if distance < minDistance || minDistance == -1 {
 			minDistance = distance
 		}
+		if distance > maxDistance {
+			maxDistance = distance
+		}
 	}
 	fmt.Println(minDistance)
+	fmt.Println(maxDistance)
 }
