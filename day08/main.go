@@ -10,11 +10,15 @@ import (
 func main() {
 	file, _ := os.Open("input.txt")
 	scanner := bufio.NewScanner(file)
-	sum := 0
+	sumPart1 := 0
+	sumPart2 := 0
 	for scanner.Scan() {
 		line := scanner.Text()
 		lineUnquoted, _ := strconv.Unquote(line)
-		sum += len(line) - len(lineUnquoted)
+		lineQuoted := strconv.Quote(line)
+		sumPart1 += len(line) - len(lineUnquoted)
+		sumPart2 += len(lineQuoted) - len(line)
 	}
-	fmt.Println(sum)
+	fmt.Println(sumPart1)
+	fmt.Println(sumPart2)
 }
