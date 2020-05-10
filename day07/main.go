@@ -9,7 +9,11 @@ import (
 )
 
 func main() {
+	// change this to run part2
+	part2 := true
+
 	wires := make(map[string]uint16, 200)
+
 	regexInput := regexp.MustCompile("^([a-z0-9]+) -> ([a-z]+)$")
 	regexAND := regexp.MustCompile("^([a-z0-9]+) AND ([a-z]+) -> ([a-z]+)$")
 	regexOR := regexp.MustCompile("^([a-z]+) OR ([a-z]+) -> ([a-z]+)$")
@@ -46,7 +50,11 @@ func main() {
 				continue
 			}
 			wire := tempRegexMatch[2]
-			wires[wire] = input
+			if wire == "b" && part2 {
+				wires["b"] = 16076
+			} else {
+				wires[wire] = input
+			}
 		} else if regexAND.MatchString(line) {
 			tempRegexMatch := regexAND.FindStringSubmatch(line)
 			wireSrc, err := strconv.Atoi(tempRegexMatch[1])
