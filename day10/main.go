@@ -1,27 +1,33 @@
 package main
 
-import "fmt"
-
-func getNewInput(input string) string {
-	return fmt.Sprintf("%d%s", len(input), input[0:1])
-}
+import (
+	"fmt"
+	"strconv"
+	"strings"
+)
 
 func main() {
 	input := "1321131112"
-	for i := 0; i < 40; i++ {
-		j := 0
-		newInput := ""
-		for j < len(input)-1 {
-			if input[j] != input[j+1] {
-				newInput += getNewInput(input[:j+1])
-				input = input[j+1:]
-				j = 0
-				continue
+	for i := 0; i < 50; i++ {
+		var result strings.Builder
+		lastCounter := 1
+		lastChar := rune(input[0])
+		for j := 1; j < len(input); j++ {
+			if lastChar == rune(input[j]) {
+				lastCounter++
+			} else {
+				result.WriteString(strconv.Itoa(lastCounter))
+				result.WriteRune(lastChar)
+				lastCounter = 1
+				lastChar = rune(input[j])
 			}
-			j++
 		}
-		newInput += getNewInput(input)
-		input = newInput
+		result.WriteString(strconv.Itoa(lastCounter))
+		result.WriteRune(lastChar)
+		input = result.String()
+		if i == 39 {
+			fmt.Println(len(input))
+		}
 	}
 	fmt.Println(len(input))
 }
