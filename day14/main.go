@@ -16,6 +16,7 @@ type Reindeer struct {
 	RestFor   int
 	StateFor  int
 	Distance  int
+	Points    int
 	State     bool
 }
 
@@ -34,7 +35,7 @@ func main() {
 		speed, _ := strconv.Atoi(regexResult[2])
 		restAfter, _ := strconv.Atoi(regexResult[3])
 		restFor, _ := strconv.Atoi(regexResult[4])
-		reindeer := Reindeer{name, speed, restAfter, restFor, 0, 0, true}
+		reindeer := Reindeer{name, speed, restAfter, restFor, 0, 0, 0, true}
 		reindeers = append(reindeers, reindeer)
 	}
 
@@ -60,6 +61,19 @@ func main() {
 			}
 			reindeers[id] = newReindeer
 		}
+		maxDistance := 0
+		for _, reindeer := range reindeers {
+			if reindeer.Distance > maxDistance {
+				maxDistance = reindeer.Distance
+			}
+		}
+		for id, reindeer := range reindeers {
+			if reindeer.Distance == maxDistance {
+				newReindeer := reindeer
+				newReindeer.Points++
+				reindeers[id] = newReindeer
+			}
+		}
 	}
 
 	maxDistance := 0
@@ -69,4 +83,12 @@ func main() {
 		}
 	}
 	fmt.Println(maxDistance)
+
+	maxPoints := 0
+	for _, reindeer := range reindeers {
+		if reindeer.Points > maxPoints {
+			maxPoints = reindeer.Points
+		}
+	}
+	fmt.Println(maxPoints)
 }
