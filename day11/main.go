@@ -71,4 +71,10 @@ func main() {
 		input = incrementPassword(input)
 	}
 	fmt.Println(input)
+	// part2
+	input = incrementPassword(input)
+	for !checkPassword(input) {
+		input = incrementPassword(input)
+	}
+	fmt.Println(input)
 }
