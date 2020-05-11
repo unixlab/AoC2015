@@ -42,6 +42,14 @@ func (c Cookie) getScore() int {
 	return capacity * durability * flavor * texture
 }
 
+func (c Cookie) getCalories() int {
+	calories := 0
+	for i := 0; i < len(c.Ingredients); i++ {
+		calories += c.Ingredients[i].getCalories()
+	}
+	return calories
+}
+
 // Ingredient struct
 type Ingredient struct {
 	Name       string
@@ -63,6 +71,10 @@ func (i Ingredient) getFlavor() int {
 
 func (i Ingredient) getTexture() int {
 	return i.Properties.Texture * i.Amount
+}
+
+func (i Ingredient) getCalories() int {
+	return i.Properties.Calories * i.Amount
 }
 
 // Properties struct
@@ -98,6 +110,7 @@ func main() {
 	}
 
 	maxScore := 0
+	maxScoreWith500Calories := 0
 
 	for i := 0; i <= 100; i++ {
 		for j := 0; j <= 100-i; j++ {
@@ -113,13 +126,19 @@ func main() {
 				cookie.Ingredients = append(cookie.Ingredients, ingredients...)
 
 				score := cookie.getScore()
+				calories := cookie.getCalories()
 
 				if score > maxScore {
 					maxScore = score
+				}
+
+				if calories == 500 && score > maxScoreWith500Calories {
+					maxScoreWith500Calories = score
 				}
 			}
 		}
 	}
 
 	fmt.Println(maxScore)
+	fmt.Println(maxScoreWith500Calories)
 }
