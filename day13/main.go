@@ -76,4 +76,34 @@ func main() {
 		}
 	}
 	fmt.Println(bestArrangement)
+
+	for name := range sittingData {
+		sittingData[name] = append(sittingData[name], Happiness{"me", 0})
+		sittingData["me"] = append(sittingData["me"], Happiness{name, 0})
+	}
+
+	names = append(names, "me")
+
+	numberOfPersons = len(names)
+	bestArrangement = -1
+
+	p = prmt.New(prmt.StringSlice(names))
+	for p.Next() {
+		currentChange := 0
+		for i := 0; i < numberOfPersons; i++ {
+			var person1, person2 string
+			person1 = names[i]
+			if i+1 == numberOfPersons {
+				person2 = names[0]
+			} else {
+				person2 = names[i+1]
+			}
+			currentChange += getHappiness(sittingData, person1, person2)
+			currentChange += getHappiness(sittingData, person2, person1)
+		}
+		if currentChange > bestArrangement || bestArrangement == -1 {
+			bestArrangement = currentChange
+		}
+	}
+	fmt.Println(bestArrangement)
 }
