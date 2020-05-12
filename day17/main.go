@@ -31,21 +31,29 @@ func intArraySum(array []int) int {
 
 func main() {
 	var numbers []int
-
 	file, _ := os.Open("input.txt")
 	scanner := bufio.NewScanner(file)
-
 	for scanner.Scan() {
 		number, _ := strconv.Atoi(scanner.Text())
 		numbers = append(numbers, number)
 	}
-
 	combinations := combinations(numbers)
 	counter := 0
+	min := -1
 	for _, v := range combinations {
 		if intArraySum(v) == 150 {
+			if len(v) < min || min == -1 {
+				min = len(v)
+			}
 			counter++
 		}
 	}
+	minCounter := 0
+	for _, v := range combinations {
+		if len(v) == min && intArraySum(v) == 150 {
+			minCounter++
+		}
+	}
 	fmt.Println(counter)
+	fmt.Println(minCounter)
 }
