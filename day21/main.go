@@ -80,6 +80,7 @@ func main() {
 
 	var you fighter
 	minCosts := 10000
+	maxCosts := 0
 
 	for _, weapon := range weapons {
 		for _, armor := range armors {
@@ -92,9 +93,13 @@ func main() {
 				if fight(you, boss) && costs < minCosts {
 					minCosts = costs
 				}
+				if !fight(you, boss) && costs > maxCosts {
+					maxCosts = costs
+				}
 			}
 		}
 	}
 
 	fmt.Println(minCosts)
+	fmt.Println(maxCosts)
 }
