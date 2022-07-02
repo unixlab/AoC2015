@@ -22,19 +22,10 @@ func stringToIntWithAlgebraicSign(input string) int {
 	return result
 }
 
-func main() {
-	file, _ := os.Open("input.txt")
-	scanner := bufio.NewScanner(file)
+type Registers map[string]int
 
-	registers := make(map[string]int, 2)
-
+func (registers Registers) Run(instructions []string) Registers {
 	offset := 0
-	var instructions []string
-
-	for scanner.Scan() {
-		instructions = append(instructions, scanner.Text())
-	}
-
 	for offset < len(instructions) {
 		instruction := instructions[offset]
 		switch {
@@ -76,6 +67,29 @@ func main() {
 			panic("unknown instruction in input")
 		}
 	}
+	return registers
+}
+
+func main() {
+	file, _ := os.Open("input.txt")
+	scanner := bufio.NewScanner(file)
+
+	registers := make(Registers, 2)
+
+	var instructions []string
+
+	for scanner.Scan() {
+		instructions = append(instructions, scanner.Text())
+	}
+
+	registers = registers.Run(instructions)
 
 	fmt.Printf("part 1 => %d\n", registers["b"])
+
+	registers["a"] = 1
+	registers["b"] = 0
+
+	registers = registers.Run(instructions)
+
+	fmt.Printf("part 2 => %d\n", registers["b"])
 }
