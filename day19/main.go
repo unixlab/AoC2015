@@ -4,50 +4,55 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"regexp"
 	"strings"
 )
 
-// Replacement struct
+type Molecules []string
+
+func (m Molecules) pushUniq(new string) Molecules {
+	found := false
+	for _, v := range m {
+		if v == new {
+			found = true
+		}
+	}
+	if !found {
+		m = append(m, new)
+	}
+	return m
+}
+
 type Replacement struct {
-	Find    string
-	Replace string
+	From string
+	To   string
 }
 
 func main() {
 	file, _ := os.Open("input.txt")
 	scanner := bufio.NewScanner(file)
 
-	var molecule string
-	var replacements []Replacement
-
-	regexReplacements := regexp.MustCompile("^([A-Za-z]+) => ([A-Za-z]+)$")
-	regexMolecule := regexp.MustCompile("^[A-Za-z]+$")
-
+	var lines []string
 	for scanner.Scan() {
-		line := scanner.Text()
-		if regexReplacements.MatchString(line) {
-			tempRegexRes := regexReplacements.FindStringSubmatch(line)
-			replacements = append(replacements, Replacement{tempRegexRes[1], tempRegexRes[2]})
-		}
-		if regexMolecule.MatchString(line) {
-			molecule = line
-		}
+		lines = append(lines, scanner.Text())
 	}
 
-	var replacedString strings.Builder
-	molecules := make(map[string]int)
+	start := lines[len(lines)-1]
 
+	var replacements []Replacement
+	for i := 0; i < len(lines)-2; i++ {
+		split := strings.Split(lines[i], " => ")
+		replacements = append(replacements, Replacement{split[0], split[1]})
+	}
+
+	var molecules Molecules
 	for _, replacement := range replacements {
-		pos := 0
-		for strings.Index(molecule[pos:], replacement.Find) > -1 {
-			replacedString.Reset()
-			pos += strings.Index(molecule[pos:], replacement.Find)
-			replacedString.WriteString(molecule[:pos])
-			replacedString.WriteString(replacement.Replace)
-			pos += len(replacement.Find)
-			replacedString.WriteString(molecule[pos:])
-			molecules[replacedString.String()]++
+		offset := len(replacement.From)
+		for i := 0; i <= len(start)-offset; i++ {
+			if start[i:i+offset] == replacement.From {
+				molecule := fmt.Sprintf("%s%s%s", start[:i], replacement.To, start[i+offset:])
+				molecules = molecules.pushUniq(molecule)
+				i += offset - 1
+			}
 		}
 	}
 
